@@ -56,9 +56,37 @@
       margin-top: 20px;
       color: #333;
     }
+
+
+@media screen and (max-width: 600px) {
+      body {
+        font-size: 14px; /* Reducir el tamaño de fuente general */
+      }
+
+      #game-container {
+        padding: 20px; /* Reducir el padding */
+        width: 100%; /* Ajustar el ancho al 100% */
+      }
+
+      h1 {
+        font-size: 1.5em; /* Reducir el tamaño de fuente del título */
+      }
+
+      #lineas {
+        flex-wrap: wrap; /* Permitir que los botones se ajusten en filas */
+        justify-content: center; /* Centrar los botones */
+      }
+
+      .button {
+        width: 45%; /* Ajustar el ancho de los botones */
+        margin: 8px 0; /* Añadir margen entre botones */
+      }
+    }
   </style>
 </head>
 <body>
+
+
   <h1>Metro de Madrid</h1>
 
   <div id="parada"></div>
