@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <title>Metro de Madrid</title>
+   <style>
+    /* Estilos */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f3f3f3;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    #parada {
+      font-size: 1.5em;
+      margin-bottom: 30px;
+      color: #555;
+    }
+
+    .button {
+      margin: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+
+    .acierto {
+      color: green;
+      font-weight: bold;
+    }
+
+    .fallo {
+      color: red;
+      font-weight: bold;
+    }
+
+    .resultados {
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Metro de Madrid</h1>
+
+  <div id="parada"></div>
+
+
+  <div id="lineas">
+<button class="button" onclick="validarRespuesta('1')"style="background-color: #00A1DE;">1</button>
+<button class="button" onclick="validarRespuesta('2')"style="background-color: #E32118;">2</button>
+<button class="button" onclick="validarRespuesta('3')"style="background-color: #ffcd00;">3</button>
+<button class="button" onclick="validarRespuesta('4')"style="background-color: #a75a25;">4</button>
+<button class="button" onclick="validarRespuesta('5')"style="background-color: #96bf0d;">5</button>
+<button class="button" onclick="validarRespuesta('6')"style="background-color: #7c878d;">6</button>
+<button class="button" onclick="validarRespuesta('7')"style="background-color: #f99110;">7</button>
+<button class="button" onclick="validarRespuesta('8')"style="background-color: #ff63bd;">8</button>
+<button class="button" onclick="validarRespuesta('9')"style="background-color: #82146e;">9</button>
+<button class="button" onclick="validarRespuesta('10')"style="background-color: #1b1f8a;">10</button>
+<button class="button" onclick="validarRespuesta('11')"style="background-color: #005b16;">11</button>
+<button class="button" onclick="validarRespuesta('12')"style="background-color: #afa609;">12</button>
+    <!-- Añade botones para cada línea aquí -->
+  </div>
+
+  <div>
+    <p>Aciertos: <span id="aciertos">0</span>/<span id="total">0</span></p>
+    <button class="button" onclick="nuevaPartida()">Nueva Partida</button>
+  </div>
+
+
+
+
+  <script>
+    const paradasMetro = [
+      { numeroLinea: "1", nombreParada: "Pinar de Chamartín" },
+ { numeroLinea: "1", nombreParada: "Bambú" },
+ { numeroLinea: "1", nombreParada: "Chamartín" },
+ { numeroLinea: "1", nombreParada: "Plaza de Castilla" },
+ { numeroLinea: "1", nombreParada: "Valdeacederas" },
+ { numeroLinea: "1", nombreParada: "Tetuán" },
+ { numeroLinea: "1", nombreParada: "Estrecho" },
+ { numeroLinea: "1", nombreParada: "Alvarado" },
+ { numeroLinea: "1", nombreParada: "Cuatro Caminos" },
+ { numeroLinea: "1", nombreParada: "Ríos Rosas" },
+ { numeroLinea: "1", nombreParada: "Iglesia" },
+ { numeroLinea: "1", nombreParada: "Chamberí" },
+ { numeroLinea: "1", nombreParada: "Bilbao" },
+ { numeroLinea: "1", nombreParada: "Tribunal" },
+ { numeroLinea: "1", nombreParada: "Gran Vía" },
+ { numeroLinea: "1", nombreParada: "Sol" },
+ { numeroLinea: "1", nombreParada: "Tirso de Molina" },
+ { numeroLinea: "1", nombreParada: "Antón Martín" },
+ { numeroLinea: "1", nombreParada: "Estación del Arte" },
+ { numeroLinea: "1", nombreParada: "Atocha" },
+ { numeroLinea: "1", nombreParada: "Menéndez Pelayo" },
+ { numeroLinea: "1", nombreParada: "Pacífico" },
+ { numeroLinea: "1", nombreParada: "Puente de Vallecas" },
+ { numeroLinea: "1", nombreParada: "Nueva Numancia" },
+ { numeroLinea: "1", nombreParada: "Portazgo" },
+ { numeroLinea: "1", nombreParada: "Buenos Aires" },
+ { numeroLinea: "1", nombreParada: "Alto del Arenal" },
+ { numeroLinea: "1", nombreParada: "Miguel Hernández" },
+ { numeroLinea: "1", nombreParada: "Sierra de Guadalupe" },
+ { numeroLinea: "1", nombreParada: "Villa de Vallecas" },
+ { numeroLinea: "1", nombreParada: "Congosto" },
+ { numeroLinea: "1", nombreParada: "La Gavia" },
+ { numeroLinea: "1", nombreParada: "Las Suertes" },
+ { numeroLinea: "1", nombreParada: "Valdecarros" },
+ { numeroLinea: "2", nombreParada: "Las Rosas" },
+ { numeroLinea: "2", nombreParada: "Avenida de Guadalajara" },
+ { numeroLinea: "2", nombreParada: "Alsacia" },
+ { numeroLinea: "2", nombreParada: "La Almudena" },
+ { numeroLinea: "2", nombreParada: "La Elipa" },
+ { numeroLinea: "2", nombreParada: "Ventas" },
+ { numeroLinea: "2", nombreParada: "Manuel Becerra" },
+ { numeroLinea: "2", nombreParada: "Goya" },
+ { numeroLinea: "2", nombreParada: "Príncipe de Vergara" },
+ { numeroLinea: "2", nombreParada: "Retiro" },
+ { numeroLinea: "2", nombreParada: "Banco de España" },
+ { numeroLinea: "2", nombreParada: "Sevilla" },
+ { numeroLinea: "2", nombreParada: "Sol" },
+ { numeroLinea: "2", nombreParada: "Ópera" },
+ { numeroLinea: "2", nombreParada: "Santo Domingo" },
+ { numeroLinea: "2", nombreParada: "Noviciado" },
+ { numeroLinea: "2", nombreParada: "San Bernardo" },
+ { numeroLinea: "2", nombreParada: "Quevedo" },
+ { numeroLinea: "2", nombreParada: "Canal" },
+ { numeroLinea: "2", nombreParada: "Cuatro Caminos" },
+ { numeroLinea: "3", nombreParada: "Moncloa" },
+ { numeroLinea: "3", nombreParada: "Argüelles" },
+ { numeroLinea: "3", nombreParada: "Ventura Rodríguez" },
+ { numeroLinea: "3", nombreParada: "Plaza de España" },
+ { numeroLinea: "3", nombreParada: "Callao" },
+ { numeroLinea: "3", nombreParada: "Sol" },
+ { numeroLinea: "3", nombreParada: "Lavapiés" },
+ { numeroLinea: "3", nombreParada: "Embajadores" },
+ { numeroLinea: "3", nombreParada: "Palos de la Frontera" },
+ { numeroLinea: "3", nombreParada: "Delicias" },
+ { numeroLinea: "3", nombreParada: "Legazpi" },
+ { numeroLinea: "3", nombreParada: "Almendrales" },
+ { numeroLinea: "3", nombreParada: "Hospital 12 de Octubre" },
+ { numeroLinea: "3", nombreParada: "San Fermín-Orcasur" },
+ { numeroLinea: "3", nombreParada: "Ciudad de los Ángeles" },
+ { numeroLinea: "3", nombreParada: "Villaverde Bajo-Cruce" },
+ { numeroLinea: "3", nombreParada: "San Cristóbal" },
+ { numeroLinea: "3", nombreParada: "Villaverde Alto" },
+ { numeroLinea: "4", nombreParada: "Argüelles" },
+ { numeroLinea: "4", nombreParada: "San Bernardo" },
+ { numeroLinea: "4", nombreParada: "Bilbao" },
+ { numeroLinea: "4", nombreParada: "Alonso Martínez" },
+ { numeroLinea: "4", nombreParada: "Colón" },
+ { numeroLinea: "4", nombreParada: "Serrano" },
+ { numeroLinea: "4", nombreParada: "Velázquez" },
+ { numeroLinea: "4", nombreParada: "Goya" },
+ { numeroLinea: "4", nombreParada: "Lista" },
+ { numeroLinea: "4", nombreParada: "Diego de León" },
+ { numeroLinea: "4", nombreParada: "Avenida de América" },
+ { numeroLinea: "4", nombreParada: "Prosperidad" },
+ { numeroLinea: "4", nombreParada: "Alfonso XIII" },
+ { numeroLinea: "4", nombreParada: "Avenida de la Paz" },
+ { numeroLinea: "4", nombreParada: "Arturo Soria" },
+ { numeroLinea: "4", nombreParada: "Esperanza" },
+ { numeroLinea: "4", nombreParada: "Canillas" },
+ { numeroLinea: "4", nombreParada: "Mar de Cristal" },
+ { numeroLinea: "4", nombreParada: "San Lorenzo" },
+ { numeroLinea: "4", nombreParada: "Parque de Santa María" },
+ { numeroLinea: "4", nombreParada: "Hortaleza" },
+ { numeroLinea: "4", nombreParada: "Manoteras" },
+ { numeroLinea: "4", nombreParada: "Pinar de Chamartín" },
+ { numeroLinea: "5", nombreParada: "Casa de Campo" },
+ { numeroLinea: "5", nombreParada: "Campamento" },
+ { numeroLinea: "5", nombreParada: "Empalme" },
+ { numeroLinea: "5", nombreParada: "Aluche" },
+ { numeroLinea: "5", nombreParada: "Eugenia de Montijo" },
+ { numeroLinea: "5", nombreParada: "Carabanchel" },
+ { numeroLinea: "5", nombreParada: "Vista Alegre" },
+ { numeroLinea: "5", nombreParada: "Oporto" },
+ { numeroLinea: "5", nombreParada: "Urgel" },
+ { numeroLinea: "5", nombreParada: "Marqués de Vadillo" },
+ { numeroLinea: "5", nombreParada: "Pirámides" },
+ { numeroLinea: "5", nombreParada: "Acacias" },
+ { numeroLinea: "5", nombreParada: "Puerta de Toledo" },
+ { numeroLinea: "5", nombreParada: "La Latina" },
+ { numeroLinea: "5", nombreParada: "Ópera" },
+ { numeroLinea: "5", nombreParada: "Callao" },
+ { numeroLinea: "5", nombreParada: "Gran Vía" },
+ { numeroLinea: "5", nombreParada: "Chueca" },
+ { numeroLinea: "5", nombreParada: "Alonso Martínez" },
+ { numeroLinea: "5", nombreParada: "Rubén Darío" },
+ { numeroLinea: "5", nombreParada: "Núñez de Balboa" },
+ { numeroLinea: "5", nombreParada: "Diego de León" },
+ { numeroLinea: "5", nombreParada: "Ventas" },
+ { numeroLinea: "5", nombreParada: "El Carmen" },
+ { numeroLinea: "5", nombreParada: "Quintana" },
+ { numeroLinea: "5", nombreParada: "Pueblo Nuevo" },
+ { numeroLinea: "5", nombreParada: "Ciudad Lineal" },
+ { numeroLinea: "5", nombreParada: "Suanzes" },
+ { numeroLinea: "5", nombreParada: "Torre Arias" },
+ { numeroLinea: "5", nombreParada: "Canillejas" },
+ { numeroLinea: "5", nombreParada: "El Capricho" },
+ { numeroLinea: "5", nombreParada: "Alameda de Osuna" },
+ { numeroLinea: "6", nombreParada: "Laguna" },
+ { numeroLinea: "6", nombreParada: "Lucero" },
+ { numeroLinea: "6", nombreParada: "Alto de Extremadura" },
+ { numeroLinea: "6", nombreParada: "Puerta del Ángel" },
+ { numeroLinea: "6", nombreParada: "Príncipe Pío" },
+ { numeroLinea: "6", nombreParada: "Argüelles" },
+ { numeroLinea: "6", nombreParada: "Moncloa" },
+ { numeroLinea: "6", nombreParada: "Ciudad Universitaria" },
+ { numeroLinea: "6", nombreParada: "Vicente Aleixandre" },
+ { numeroLinea: "6", nombreParada: "Guzmán el Bueno" },
+ { numeroLinea: "6", nombreParada: "Cuatro Caminos" },
+ { numeroLinea: "6", nombreParada: "Nuevos Ministerios" },
+ { numeroLinea: "6", nombreParada: "República Argentina" },
+ { numeroLinea: "6", nombreParada: "Avenida de América" },
+ { numeroLinea: "6", nombreParada: "Diego de León" },
+ { numeroLinea: "6", nombreParada: "Manuel Becerra" },
+ { numeroLinea: "6", nombreParada: "O'Donnell" },
+ { numeroLinea: "6", nombreParada: "Sainz de Baranda" },
+ { numeroLinea: "6", nombreParada: "Conde de Casal" },
+ { numeroLinea: "6", nombreParada: "Pacífico" },
+ { numeroLinea: "6", nombreParada: "Méndez Álvaro" },
+ { numeroLinea: "6", nombreParada: "Arganzuela-Planetario" },
+ { numeroLinea: "6", nombreParada: "Legazpi" },
+ { numeroLinea: "6", nombreParada: "Usera" },
+ { numeroLinea: "6", nombreParada: "Plaza Elíptica" },
+ { numeroLinea: "6", nombreParada: "Opañel" },
+ { numeroLinea: "6", nombreParada: "Oporto" },
+ { numeroLinea: "6", nombreParada: "Carpetana" },
+ { numeroLinea: "7", nombreParada: "Pitis" },
+ { numeroLinea: "7", nombreParada: "Arroyofresno" },
+ { numeroLinea: "7", nombreParada: "Lacoma" },
+ { numeroLinea: "7", nombreParada: "Avenida de la Ilustración" },
+ { numeroLinea: "7", nombreParada: "Peñagrande" },
+ { numeroLinea: "7", nombreParada: "Antonio Machado" },
+ { numeroLinea: "7", nombreParada: "Valdezarza" },
+ { numeroLinea: "7", nombreParada: "Francos Rodríguez" },
+ { numeroLinea: "7", nombreParada: "Guzmán el Bueno" },
+ { numeroLinea: "7", nombreParada: "Islas Filipinas" },
+ { numeroLinea: "7", nombreParada: "Canal" },
+ { numeroLinea: "7", nombreParada: "Alonso Cano" },
+ { numeroLinea: "7", nombreParada: "Gregorio Marañón" },
+ { numeroLinea: "7", nombreParada: "Avenida de América" },
+ { numeroLinea: "7", nombreParada: "Cartagena" },
+ { numeroLinea: "7", nombreParada: "Parque de las Avenidas" },
+ { numeroLinea: "7", nombreParada: "Barrio de la Concepción" },
+ { numeroLinea: "7", nombreParada: "Pueblo Nuevo" },
+ { numeroLinea: "7", nombreParada: "Ascao" },
+ { numeroLinea: "7", nombreParada: "García Noblejas" },
+ { numeroLinea: "7", nombreParada: "Simancas" },
+ { numeroLinea: "7", nombreParada: "San Blas" },
+ { numeroLinea: "7", nombreParada: "Las Musas" },
+ { numeroLinea: "7", nombreParada: "Estadio Metropolitano" },
+ { numeroLinea: "7", nombreParada: "Barrio del Puerto" },
+ { numeroLinea: "7", nombreParada: "Coslada Central" },
+ { numeroLinea: "7", nombreParada: "La Rambla" },
+ { numeroLinea: "7", nombreParada: "San Fernando" },
+ { numeroLinea: "8", nombreParada: "Aeropuerto T4" },
+ { numeroLinea: "8", nombreParada: "Barajas" },
+ { numeroLinea: "8", nombreParada: "Aeropuerto T1-T2-T3" },
+ { numeroLinea: "8", nombreParada: "Feria de Madrid" },
+ { numeroLinea: "8", nombreParada: "Mar de Cristal" },
+ { numeroLinea: "8", nombreParada: "Pinar del Rey" },
+ { numeroLinea: "8", nombreParada: "Colombia" },
+ { numeroLinea: "8", nombreParada: "Nuevos Ministerios" },
+ { numeroLinea: "9", nombreParada: "Paco de Lucía" },
+ { numeroLinea: "9", nombreParada: "Mirasierra" },
+ { numeroLinea: "9", nombreParada: "Herrera Oria" },
+ { numeroLinea: "9", nombreParada: "Barrio del Pilar" },
+ { numeroLinea: "9", nombreParada: "Ventilla" },
+ { numeroLinea: "9", nombreParada: "Plaza de Castilla" },
+ { numeroLinea: "9", nombreParada: "Duque de Pastrana" },
+ { numeroLinea: "9", nombreParada: "Pío XII" },
+ { numeroLinea: "9", nombreParada: "Colombia" },
+ { numeroLinea: "9", nombreParada: "Concha Espina" },
+ { numeroLinea: "9", nombreParada: "Cruz del Rayo" },
+ { numeroLinea: "9", nombreParada: "Avenida de América" },
+ { numeroLinea: "9", nombreParada: "Núñez de Balboa" },
+ { numeroLinea: "9", nombreParada: "Príncipe de Vergara" },
+ { numeroLinea: "9", nombreParada: "Ibiza" },
+ { numeroLinea: "9", nombreParada: "Sainz de Baranda" },
+ { numeroLinea: "9", nombreParada: "Estrella" },
+ { numeroLinea: "9", nombreParada: "Vinateros" },
+ { numeroLinea: "9", nombreParada: "Artilleros" },
+ { numeroLinea: "9", nombreParada: "Pavones" },
+ { numeroLinea: "9", nombreParada: "Valdebernardo" },
+ { numeroLinea: "9", nombreParada: "Vicálvaro" },
+ { numeroLinea: "9", nombreParada: "San Cipriano" },
+ { numeroLinea: "9", nombreParada: "Puerta de Arganda" },
+ { numeroLinea: "9", nombreParada: "Rivas-Urbanizaciones" },
+ { numeroLinea: "9", nombreParada: "Rivas-Futura" },
+ { numeroLinea: "9", nombreParada: "Rivas-Vaciamadrid" },
+ { numeroLinea: "9", nombreParada: "La Poveda" },
+ { numeroLinea: "9", nombreParada: "Arganda del Rey" },
+ { numeroLinea: "10", nombreParada: "Puerta del Sur" },
+ { numeroLinea: "10", nombreParada: "Joaquín Vilumbrales" },
+ { numeroLinea: "10", nombreParada: "Cuatro Vientos" },
+ { numeroLinea: "10", nombreParada: "Aviación Española" },
+ { numeroLinea: "10", nombreParada: "Colonia Jardín" },
+ { numeroLinea: "10", nombreParada: "Casa de Campo" },
+ { numeroLinea: "10", nombreParada: "Batán" },
+ { numeroLinea: "10", nombreParada: "Lago" },
+ { numeroLinea: "10", nombreParada: "Príncipe Pío" },
+ { numeroLinea: "10", nombreParada: "Plaza de España" },
+ { numeroLinea: "10", nombreParada: "Tribunal" },
+ { numeroLinea: "10", nombreParada: "Alonso Martínez" },
+ { numeroLinea: "10", nombreParada: "Gregorio Marañón" },
+ { numeroLinea: "10", nombreParada: "Nuevos Ministerios" },
+ { numeroLinea: "10", nombreParada: "Santiago Bernabéu" },
+ { numeroLinea: "10", nombreParada: "Cuzco" },
+ { numeroLinea: "10", nombreParada: "Plaza de Castilla" },
+ { numeroLinea: "10", nombreParada: "Chamartín" },
+ { numeroLinea: "10", nombreParada: "Begoña" },
+ { numeroLinea: "10", nombreParada: "Fuencarral" },
+ { numeroLinea: "10", nombreParada: "Tres Olivos" },
+ { numeroLinea: "10", nombreParada: "Montecarmelo" },
+ { numeroLinea: "10", nombreParada: "Las Tablas" },
+ { numeroLinea: "10", nombreParada: "Ronda de la Comunicación" },
+ { numeroLinea: "10", nombreParada: "La Granja" },
+ { numeroLinea: "10", nombreParada: "La Moraleja" },
+ { numeroLinea: "10", nombreParada: "Marqués de la Valdavia" },
+ { numeroLinea: "10", nombreParada: "Manuel de Falla" },
+ { numeroLinea: "10", nombreParada: "Baunatal" },
+ { numeroLinea: "10", nombreParada: "Reyes Católicos" },
+ { numeroLinea: "10", nombreParada: "Hospital Infanta Sofía" },
+ { numeroLinea: "11", nombreParada: "La Fortuna" },
+ { numeroLinea: "11", nombreParada: "La Peseta" },
+ { numeroLinea: "11", nombreParada: "Carabanchel Alto" },
+ { numeroLinea: "11", nombreParada: "San Francisco" },
+ { numeroLinea: "11", nombreParada: "Pan Bendito" },
+ { numeroLinea: "11", nombreParada: "Abrantes" },
+ { numeroLinea: "11", nombreParada: "Plaza Elíptica" },
+ { numeroLinea: "12", nombreParada: "Puerta del Sur" },
+ { numeroLinea: "12", nombreParada: "Parque Lisboa" },
+ { numeroLinea: "12", nombreParada: "Alcorcón Central" },
+ { numeroLinea: "12", nombreParada: "Parque Oeste" },
+ { numeroLinea: "12", nombreParada: "Universidad Rey Juan Carlos" },
+ { numeroLinea: "12", nombreParada: "Móstoles Central" },
+ { numeroLinea: "12", nombreParada: "Pradillo" },
+ { numeroLinea: "12", nombreParada: "Hospital de Móstoles" },
+ { numeroLinea: "12", nombreParada: "Manuela Malasaña" },
+ { numeroLinea: "12", nombreParada: "Loranca" },
+ { numeroLinea: "12", nombreParada: "Hospital de Fuenlabrada" },
+ { numeroLinea: "12", nombreParada: "Parque Europa" },
+ { numeroLinea: "12", nombreParada: "Fuenlabrada Central" },
+ { numeroLinea: "12", nombreParada: "Parque de los Estados" },
+ { numeroLinea: "12", nombreParada: "Arroyo Culebro" },
+ { numeroLinea: "12", nombreParada: "Conservatorio" },
+ { numeroLinea: "12", nombreParada: "Alonso de Mendoza" },
+ { numeroLinea: "12", nombreParada: "Getafe Central" },
+ { numeroLinea: "12", nombreParada: "Juan de la Cierva" },
+ { numeroLinea: "12", nombreParada: "El Casar" },
+ { numeroLinea: "12", nombreParada: "Los Espartales" },
+ { numeroLinea: "12", nombreParada: "El Bercial" },
+ { numeroLinea: "12", nombreParada: "El Carrascal" },
+ { numeroLinea: "12", nombreParada: "Julián Besteiro" },
+ { numeroLinea: "12", nombreParada: "Casa del Reloj" },
+ { numeroLinea: "12", nombreParada: "Hospital Severo Ochoa" },
+ { numeroLinea: "12", nombreParada: "Leganés Central" },
+ { numeroLinea: "12", nombreParada: "San Nicasio" },
+
+
+
+
+
+
+
+      // ... (añade todas las paradas con su respectiva línea)
+    ];
+
+    let paradaActual = null;
+    let aciertos = 0;
+    let totalPartidas = 0;
+
+    function mostrarParadaAleatoria() {
+      const paradaDiv = document.getElementById("parada");
+      paradaActual = paradasMetro[Math.floor(Math.random() * paradasMetro.length)];
+      paradaDiv.textContent = `Parada: ${paradaActual.nombreParada}`;
+    }
+let errores = 0;
+
+    function validarRespuesta(numeroLinea) {
+      const paradaDiv = document.getElementById("parada");
+      let mensaje = '';
+      let clase = '';
+      let esCorrecto = false;
+
+      const nombreParadaActual = paradaActual.nombreParada;
+
+      const paradasMismaNombre = paradasMetro.filter(parada => parada.nombreParada === nombreParadaActual);
+
+      if (paradasMismaNombre.some(parada => parada.numeroLinea === numeroLinea)) {
+        esCorrecto = true;
+        aciertos++;
+        mensaje = '¡Correcto!';
+        clase = 'acierto';
+      } else {
+        mensaje = 'Incorrecto. Inténtalo de nuevo.';
+        clase = 'fallo';
+        errores++;
+      }
+
+      document.getElementById("aciertos").textContent = aciertos;
+      document.getElementById("total").textContent = aciertos + errores;
+
+      paradaDiv.innerHTML = `<p class="${clase}">${mensaje}</p>`;
+
+      totalPartidas++;
+      if (totalPartidas === 10) {
+        alert(`Partida finalizada. Aciertos: ${aciertos}/10`);
+        nuevaPartida();
+      } else {
+        setTimeout(() => {
+          mostrarParadaAleatoria();
+        }, 1000);
+      }
+    }
+
+    function nuevaPartida() {
+      aciertos = 0;
+      errores = 0;
+      totalPartidas = 0;
+      document.getElementById("aciertos").textContent = aciertos;
+      document.getElementById("total").textContent = totalPartidas;
+      mostrarParadaAleatoria();
+    }
+
+    window.onload = function() {
+      nuevaPartida();
+    };
+  </script>
+</body>
+</html>
