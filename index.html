@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
   <title>Metro de Madrid</title>
-   <style>
+  <style>
     /* Estilos */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -40,7 +40,6 @@
       transition: background-color 0.3s ease;
     }
 
-
     .acierto {
       color: green;
       font-weight: bold;
@@ -57,8 +56,7 @@
       color: #333;
     }
 
-
-@media screen and (max-width: 600px) {
+    @media screen and (max-width: 600px) {
       body {
         font-size: 14px; /* Reducir el tamaño de fuente general */
       }
@@ -72,47 +70,54 @@
         font-size: 1.5em; /* Reducir el tamaño de fuente del título */
       }
 
+       #lineas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .button {
+    width: calc(80% - 80px); /* Ajustar el ancho de los botones */
+    margin-bottom: 10px; /* Espacio entre botones en la misma columna */
+  }
+    }
+
+    @media screen and (min-width: 601px) {
       #lineas {
-        flex-wrap: wrap; /* Permitir que los botones se ajusten en filas */
-        justify-content: center; /* Centrar los botones */
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Dos columnas iguales */
+        gap: 20px; /* Espacio entre botones */
       }
 
       .button {
-        width: 45%; /* Ajustar el ancho de los botones */
-        margin: 8px 0; /* Añadir margen entre botones */
+        width: 100%; /* Ancho completo para ocupar cada columna */
       }
     }
   </style>
 </head>
 <body>
-
-
   <h1>Metro de Madrid</h1>
-
   <div id="parada"></div>
-
-
   <div id="lineas">
-<button class="button" onclick="validarRespuesta('1')"style="background-color: #00A1DE;">1</button>
-<button class="button" onclick="validarRespuesta('2')"style="background-color: #E32118;">2</button>
-<button class="button" onclick="validarRespuesta('3')"style="background-color: #ffcd00;">3</button>
-<button class="button" onclick="validarRespuesta('4')"style="background-color: #a75a25;">4</button>
-<button class="button" onclick="validarRespuesta('5')"style="background-color: #96bf0d;">5</button>
-<button class="button" onclick="validarRespuesta('6')"style="background-color: #7c878d;">6</button>
-<button class="button" onclick="validarRespuesta('7')"style="background-color: #f99110;">7</button>
-<button class="button" onclick="validarRespuesta('8')"style="background-color: #ff63bd;">8</button>
-<button class="button" onclick="validarRespuesta('9')"style="background-color: #82146e;">9</button>
-<button class="button" onclick="validarRespuesta('10')"style="background-color: #1b1f8a;">10</button>
-<button class="button" onclick="validarRespuesta('11')"style="background-color: #005b16;">11</button>
-<button class="button" onclick="validarRespuesta('12')"style="background-color: #afa609;">12</button>
+    <button class="button" onclick="validarRespuesta('1')" style="background-color: #00A1DE;">1</button>
+    <button class="button" onclick="validarRespuesta('2')" style="background-color: #E32118;">2</button>
+    <button class="button" onclick="validarRespuesta('3')" style="background-color: #ffcd00;">3</button>
+    <button class="button" onclick="validarRespuesta('4')" style="background-color: #a75a25;">4</button>
+    <button class="button" onclick="validarRespuesta('5')" style="background-color: #96bf0d;">5</button>
+    <button class="button" onclick="validarRespuesta('6')" style="background-color: #7c878d;">6</button>
+    <button class="button" onclick="validarRespuesta('7')" style="background-color: #f99110;">7</button>
+    <button class="button" onclick="validarRespuesta('8')" style="background-color: #ff63bd;">8</button>
+    <button class="button" onclick="validarRespuesta('9')" style="background-color: #82146e;">9</button>
+    <button class="button" onclick="validarRespuesta('10')" style="background-color: #1b1f8a;">10</button>
+    <button class="button" onclick="validarRespuesta('11')" style="background-color: #005b16;">11</button>
+    <button class="button" onclick="validarRespuesta('12')" style="background-color: #afa609;">12</button>
     <!-- Añade botones para cada línea aquí -->
   </div>
-
   <div>
     <p>Aciertos: <span id="aciertos">0</span>/<span id="total">0</span></p>
     <button class="button" onclick="nuevaPartida()">Nueva Partida</button>
   </div>
-
+</body>
 
 
 
