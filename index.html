@@ -98,12 +98,33 @@
         width: 100%; /* Ancho completo para ocupar cada columna */
       }
     }
+
+    /* Estilos de confeti */
+    @keyframes confeti-fall {
+      0% {
+        transform: translateY(-200%);
+      }
+      100% {
+        transform: translateY(100%);
+      }
+    }
+
+    .confeti {
+      position: fixed;
+      top: -50px;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      background-color: #f1c40f;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      animation: confeti-fall 2s ease-out infinite;
+    }
   </style>
 </head>
 <body>
   <h1>Metro de Madrid</h1>
   <div id="parada"></div>
- <div id="lineas">
+  <div id="lineas">
     <button class="button" onclick="validarRespuesta('1')" style="background-color: #00A1DE;">1</button>
     <button class="button" onclick="validarRespuesta('2')" style="background-color: #E32118;">2</button>
     <button class="button" onclick="validarRespuesta('3')" style="background-color: #ffcd00;">3</button>
@@ -122,8 +143,14 @@
     <p>Aciertos: <span id="aciertos">0</span>/<span id="total">0</span></p>
     <button class="button" onclick="nuevaPartida()">Nueva Partida</button>
   </div>
-</body>
 
+  <!-- Confeti -->
+  <div class="confeti"></div>
+
+  <script>
+    // Aquí va tu código JavaScript actual, incluyendo la lógica para mostrar confeti
+  </script>
+</body>
 
   <script>
     const paradasMetro = [
@@ -432,7 +459,8 @@
       paradaActual = paradasMetro[Math.floor(Math.random() * paradasMetro.length)];
       paradaDiv.textContent = `Parada: ${paradaActual.nombreParada}`;
     }
-let errores = 0;
+
+    let errores = 0;
 
     function validarRespuesta(numeroLinea) {
       const paradaDiv = document.getElementById("parada");
@@ -450,10 +478,11 @@ let errores = 0;
         mensaje = '¡Correcto!';
         clase = 'acierto';
       } else {
-        mensaje = 'Incorrecto. Inténtalo de nuevo.';
-        clase = 'fallo';
-        errores++;
-      }
+    const lineasCorrectas = paradasMismaNombre.map(parada => parada.numeroLinea).join(', ');
+    mensaje = `${lineasCorrectas}`;
+    clase = 'fallo';
+    errores++;
+}
 
       document.getElementById("aciertos").textContent = aciertos;
       document.getElementById("total").textContent = aciertos + errores;
@@ -484,5 +513,8 @@ let errores = 0;
       nuevaPartida();
     };
   </script>
+</head>
+<body>
+  <!-- Resto del contenido del juego (igual que antes) -->
 </body>
 </html>
